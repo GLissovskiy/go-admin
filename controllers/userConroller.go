@@ -9,16 +9,18 @@ import (
 )
 
 func AllUsers(c *fiber.Ctx) error {
+	page, _ := strconv.Atoi(c.Query("page", "1"))
 	limit := 5
+	offset := (page - 1) * limit
 	var users []models.User
 
-	database.DB.Preload("Role").Limit(limit).Find(&users)
+	database.DB.Preload("Role").Offset(offset).Limit(limit).Find(&users)
 
 	//return c.JSON(users)
 	return c.JSON(fiber.Map{
 		"data": users,
 		"meta": fiber.Map{
-			"page": 1,
+			"page": page,
 		},
 	})
 }
