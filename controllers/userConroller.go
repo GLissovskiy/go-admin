@@ -9,11 +9,18 @@ import (
 )
 
 func AllUsers(c *fiber.Ctx) error {
+	limit := 5
 	var users []models.User
 
-	database.DB.Preload("Role").Find(&users)
+	database.DB.Preload("Role").Limit(limit).Find(&users)
 
-	return c.JSON(users)
+	//return c.JSON(users)
+	return c.JSON(fiber.Map{
+		"data": users,
+		"meta": fiber.Map{
+			"page": 1,
+		},
+	})
 }
 
 func CraeteUser(c *fiber.Ctx) error {
