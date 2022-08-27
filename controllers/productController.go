@@ -18,7 +18,7 @@ func AllProducts(c *fiber.Ctx) error {
 
 	database.DB.Offset(offset).Limit(limit).Find(&products)
 
-	database.DB.Model(&models.User{}).Count(&total)
+	database.DB.Model(&models.Product{}).Count(&total)
 
 	//return c.JSON(products)
 	return c.JSON(fiber.Map{
