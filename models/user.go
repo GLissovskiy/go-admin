@@ -25,7 +25,7 @@ func (user *User) ComparePassword(password string) error {
 	return bcrypt.CompareHashAndPassword(user.Password, []byte(password))
 }
 
-func (user *User) Count(db gorm.DB) int64 {
+func (user *User) Count(db *gorm.DB) int64 {
 	var total int64
 	db.Model(&User{}).Count(&total)
 
