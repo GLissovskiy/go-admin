@@ -2,7 +2,6 @@ package middlewares
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -32,9 +31,7 @@ func IsAuthorized(c *fiber.Ctx, page string) error {
 		Id: user.RoleId,
 	}
 
-	database.DB.Preload("Permissons").Find(&role)
-
-	fmt.Println(role.Permissions)
+	database.DB.Preload("Permissions").Find(&role)
 
 	if c.Method() == "GET" {
 		for _, permission := range role.Permissions {
