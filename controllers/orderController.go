@@ -135,3 +135,29 @@ func DeleteProduct(c *fiber.Ctx) error {
 	return nil
 
 }
+
+type Sales struct {
+	Date string `json:"date"`
+	Sum  string `json:"sum"`
+}
+
+/*
+select
+	DATE_FORMAT(o.created_at, '%Y-%m-%d') as date , SUM(oi.price * oi.quantity) as sum
+from go_admin.orders o
+join go_admin.order_items oi on o.id = oi.order_id
+GROUP BY DATE_FORMAT(o.created_at, '%Y-%m-%d')
+*/
+
+func Chart(c *fiber.Ctx) error {
+	var sales []Sales
+	database.DB.Raw(`
+			SELECT 
+			DATE_FORMAT(o.created_at, '%Y-%m-%d') as date , SUM(oi.price * oi.quantity) as sum
+			FROM go_admin.orders o
+			JOIN go_admin.order_items oi ON o.id = oi.order_id
+			GROUP BY DATE_FORMAT(o.created_at, '%Y-%m-%d') 
+	`).Scan(&sales)
+
+	return c.JSON(sales)
+}
